@@ -192,3 +192,15 @@
     transform: translateX(0%);
 
 }
+
+.display-none{
+    display: none;
+}
+
+.default-text .txtbox-label{
+    border-bottom: 0px;
+}
+.placeholder{
+    color: beige;
+
+}
