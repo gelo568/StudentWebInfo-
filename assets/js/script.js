@@ -11,13 +11,13 @@ const deleteBtn = document.getElementById("delete-btn");
 const saveBtn = document.getElementById("save-btn");
 const cancelBtn = document.getElementById("cancel-btn");
 
-const txtLastname = document.getElementById("text-lastname");
-const txtFirstname = document.getElementById("text-firstname");
-const txtMiddlename = document.getElementById("text-middlename");
-const txtGender = document.getElementById("text-gender");
-const txtYearLevel = document.getElementById("text-year-level");
-const txtSection = document.getElementById("text-section");
-const txtEmail = document.getElementById("text-email");
+const txtLastname = document.getElementById("txt-lastname");
+const txtFirstname = document.getElementById("txt-firstname");
+const txtMiddlename = document.getElementById("txt-middlename");
+const txtGender = document.getElementById("txt-gender");
+const txtYearLevel = document.getElementById("txt-year-level");
+const txtSection = document.getElementById("txt-section");
+const txtEmail = document.getElementById("txt-email");
 
 const placeholderLastname = document.getElementById("placeholder-lastname");
 const placeholderFirstname = document.getElementById("placeholder-firstname");
@@ -49,13 +49,12 @@ editBtn.addEventListener("click", () => {
 
 deleteBtn.addEventListener("click", () => {
   formMode = "Delete";
-  if (confirm("Are you sure you want to delete this student?")) {
-    deleteStudent();
-    resetForm();
-    fetchStudentData();
-  }
+    if (confirm("Are you sure you want to delete this student?")) {
+        deleteStudent();
+        resetForm();
+        fetchStudentData();
+    }
 });
-
 
 saveBtn.addEventListener("click", () => {
   if (validateForm().length > 0) return;
@@ -64,9 +63,9 @@ saveBtn.addEventListener("click", () => {
     addStudent();
   }
 
-  if (formMode === "Edit") {
+  if(formMode === "Edit"){
     editStudent();
-  }
+  }     
 
   resetForm();
   displayStudentDetails(getStudentById(selectedStudentID));
@@ -74,12 +73,12 @@ saveBtn.addEventListener("click", () => {
 });
 
 cancelBtn.addEventListener("click", () => {
-    resetForm();
-    displayStudentDetails(getStudentById(selectedStudentID));
+  resetForm();
+  displayStudentDetails(getStudentById(selectedStudentID));
 });
 
 function addStudent() {
-  selectedStudentID = students.length + 1;
+    selectedStudentID = students.length + 1;
 
   const student = {
     id: selectedStudentID,
@@ -89,38 +88,35 @@ function addStudent() {
     gender: txtGender.value,
     year_level: txtYearLevel.value,
     section: txtSection.value,
-    email: txtEmail.value,
-  };
+        email: txtEmail.value,
+    };
   students.push(student);
   formMode = "";
 }
 
 function editStudent() {
-  let getStudent = getStudentById(selectedStudentID);
-  if (getStudent) {
-    getStudent.lastname = txtLastname.value;
-    getStudent.firstname = txtFirstname.value;
-    getStudent.middlename = txtMiddlename.value;
-    getStudent.gender = txtGender.value;
-    getStudent.year_level = txtYearLevel.value;
-    getStudent.section = txtSection.value;
-    getStudent.email = txtEmail.value;
-  }
-  formMode = "";
+     let getStudent = getStudentById(selectedStudentID);
+     if (getStudent) {
+       getStudent.lastname = txtLastname.value;
+       getStudent.firstname = txtFirstname.value;
+       getStudent.middlename = txtMiddlename.value;
+       getStudent.gender = txtGender.value;
+       getStudent.year_level = txtYearLevel.value;
+       getStudent.section = txtSection.value;
+       getStudent.email = txtEmail.value;
+     }
+     formMode = "";
 }
 
 function deleteStudent() {
-  if (selectedStudentID === -1) return;
-  students.splice(
-    students.findIndex((student) => student.id === selectedStudentID),
-    1,
-  );
-  formMode = "";
+    if(selectedStudentID === -1) return;
+    students.splice(
+        students.findIndex((s) => s.id === selectedStudentID), 1);
+    formMode = "";
 }
 
 function fetchStudentData() {
   tbody.innerHTML = "";
-
   students.forEach((student) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -131,7 +127,7 @@ function fetchStudentData() {
         <td>${student.year_level}</td>
         <td>${student.section}</td>
         <td>${student.email}</td>
-        `;
+    `;
 
     row.addEventListener("click", () => {
       resetForm();
@@ -163,6 +159,7 @@ function displayStudentDetails(student) {
   placeholderEmail.querySelector("#placeholder-value-email").textContent =
     student.email;
 }
+
 function populateFormFields(student) {
   txtLastname.value = student.lastname;
   txtFirstname.value = student.firstname;
@@ -176,15 +173,18 @@ function populateFormFields(student) {
 function resetForm() {
   toggleButtons(false, false);
   enableFormFields(false);
-  resetPlaceholders();
+  resetPlaceholder();
   resetInputFields();
 }
 
-function toggleButtons(showSaveCancelBtn = false, showEditDeleteBtn = false) {
-  saveBtn.classList.toggle("display-none", !showSaveCancelBtn);
-  cancelBtn.classList.toggle("display-none", !showSaveCancelBtn);
-  editBtn.classList.toggle("display-none", !showEditDeleteBtn);
-  deleteBtn.classList.toggle("display-none", !showEditDeleteBtn);
+function toggleButtons(
+  ShowSaveCancelBtn = false,
+  ShowAddEditDeleteBtn = false,
+) {
+  saveBtn.classList.toggle("display-none", !ShowSaveCancelBtn);
+  cancelBtn.classList.toggle("display-none", !ShowSaveCancelBtn);
+  editBtn.classList.toggle("display-none", !ShowAddEditDeleteBtn);
+  deleteBtn.classList.toggle("display-none", !ShowAddEditDeleteBtn);
 }
 
 function enableFormFields(enable = false) {
@@ -206,12 +206,12 @@ function enableFormFields(enable = false) {
   });
 }
 
-function resetPlaceholders() {
+function resetPlaceholder() {
   placeholderLastname.innerHTML = `Last Name: <span id="placeholder-value-lastname"></span>`;
   placeholderFirstname.innerHTML = `First Name: <span id="placeholder-value-firstname"></span>`;
   placeholderMiddlename.innerHTML = `Middle Name: <span id="placeholder-value-middlename"></span>`;
   placeholderGender.innerHTML = `Gender: <span id="placeholder-value-gender"></span>`;
-  placeholderYearLevel.innerHTML = `Year level: <span id="placeholder-value-year-level"></span>`;
+  placeholderYearLevel.innerHTML = `Year Level: <span id="placeholder-value-year-level"></span>`;
   placeholderSection.innerHTML = `Section: <span id="placeholder-value-section"></span>`;
   placeholderEmail.innerHTML = `Email: <span id="placeholder-value-email"></span>`;
 }
